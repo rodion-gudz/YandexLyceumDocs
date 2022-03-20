@@ -30,7 +30,7 @@ courses = [course for course in courses if input(f"{course['title']}\t(Y/n) ").l
 if os.path.exists('docs'):
     shutil.rmtree('docs')
 
-os.makedirs("docs/courses")
+os.makedirs(os.path.join('docs', 'courses'))
 
 
 def save_courses_page(courses):
