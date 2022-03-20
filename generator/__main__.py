@@ -59,8 +59,10 @@ def save_material_page(content, shortTitle, title, course_id, lesson_id, materia
 print()
 print("Скачивание курсов...")
 for course in courses:
+    course_path = os.path.join('docs', 'courses', str(course['course_id']))
     lessons = client.get_course(course['course_id'], course['group_id'])
-    os.makedirs(f"docs/courses/{course['course_id']}/lessons")
+    lessons_path = os.path.join(course_path, 'lessons')
+    os.makedirs(lessons_path)
     for lesson in tqdm(lessons,
                        unit='course',
                        bar_format='{l_bar}{bar}| [{remaining}]',
@@ -72,7 +74,7 @@ for course in courses:
         if not materials:
             continue
         save_lesson_page(materials, course['course_id'], lesson['id'])
-        os.mkdir(f"docs/courses/{course['course_id']}/lessons/{lesson['id']}/materials")
+        os.mkdir(os.path.join(lessons_path, str(lesson['id']), 'materials'))
         for material in materials:
             material = client.get_material(lesson['id'], course['group_id'], material['id'])
             if 'detailedMaterial' not in material:
@@ -85,9 +87,9 @@ for course in courses:
     output_from_parsed_template = lessons_template.render(
         lessons=lessons,
         title=course['title'])
-    with open(f"docs/courses/{course['course_id']}/index.html", "w") as fh:
+    with open(os.path.join(course_path, 'index.html'), "w") as fh:
         fh.write(output_from_parsed_template)
     if not lessons:
         courses.remove(course)
 
-save_courses_page(courses)
+    save_courses_page(courses)
