@@ -1,0 +1,27 @@
+{% extends "base.jinja2" %}
+{% block title %}{{ title }}{% endblock %}
+{% block material_style %}
+	<link rel="stylesheet"
+	      href="https://yastatic.net/s3/lyceum/frontend/static/59.0-rc-a079b43e/desktop-ru/material.css">
+{% endblock %}
+
+{% block content %}
+	<div class="lesson-material">
+		<div class="layout">
+			<div class="layout__wrapper layout__wrapper_type_narrow layout__wrapper_fixed">
+				<main class="layout__main">
+					<div class="lesson-material__wrapper">
+						<a class="nav-tab nav-tab_back nav-tab_view_button" href="../..">
+						<span data-lego="react"
+						      class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
+							<span class="nav-tab__inner">Урок {{ shortTitle }}</span>
+						</a>
+						<section class="lesson-material__content">
+							<article class="material">{{ content }}</article>
+						</section>
+					</div>
+				</main>
+			</div>
+		</div>
+	</div>
+{% endblock %}

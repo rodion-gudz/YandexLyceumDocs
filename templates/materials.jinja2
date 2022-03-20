@@ -1,0 +1,35 @@
+{% extends "base.jinja2" %}
+{% block title %}Материалы{% endblock %}
+
+{% block content %}
+	<div class="layout__wrapper layout__wrapper_type_wide">
+		<aside class="layout__aside">
+			<section class="aside-section">
+				<p>
+					<a class="nav-tab nav-tab_back nav-tab_view_button" href="../..">
+					<span data-lego="react"
+					      class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
+						<span class="nav-tab__inner">Назад</span>
+					</a>
+				</p>
+				<h1 class="heading heading_level_1">Материалы</h1>
+				<div class="aside-section__body">
+					<div class="material-list">
+						<ul class="material-list__list">
+							{% for material in materials %}
+								<li class="material-list__item">
+									<a class="material-list__material-link"
+									   href="materials/{{ material['id'] }}">
+										<div aria-hidden="true"
+										     class="material-list__icon material-list__icon_type_textbook"></div>
+										<div class="material-list__material-title">{{ material['title'] }}</div>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</section>
+		</aside>
+	</div>
+{% endblock %}

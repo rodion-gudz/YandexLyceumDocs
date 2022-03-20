@@ -1,0 +1,20 @@
+{% extends "base.jinja2" %}
+{% block title %}Курсы{% endblock %}
+
+{% block content %}
+	<div class="layout__wrapper layout__wrapper_type_wide">
+		<main class="layout__main">
+			<h1 class="heading heading_level_1 courses__heading">Курсы</h1>
+			<ul class="courses__list">
+				{% for course in courses %}
+					<li class="courses__list-item">
+						<a class="course-card course-card_type_link" href="courses/{{ course['course_id'] }}">
+							<h4 class="course-card__title"
+							    title="{{ course['title'] }}">{{ course['title'] }}</h4>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</main>
+	</div>
+{% endblock %}
