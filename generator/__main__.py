@@ -34,14 +34,14 @@ os.makedirs(os.path.join('docs', 'courses'))
 
 
 def save_courses_page(courses):
-    with open(os.path.join('docs', 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
+    with open(os.path.join('docs', 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
         fh.write(courses_template.render(courses=courses))
 
 
 def save_lesson_page(materials, course_id, lesson_id):
     lesson_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id))
     os.mkdir(lesson_path)
-    with open(os.path.join(lesson_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
+    with open(os.path.join(lesson_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
         fh.write(materials_template.render(materials=materials))
 
 
@@ -49,7 +49,7 @@ def save_material_page(content, shortTitle, title, course_id, lesson_id, materia
     material_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id), 'materials',
                                  str(material_id))
     os.mkdir(material_path)
-    with open(os.path.join(material_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
+    with open(os.path.join(material_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
         fh.write(material_template.render(
             content=content or "",
             shortTitle=shortTitle,
@@ -92,7 +92,7 @@ for course in courses:
     output_from_parsed_template = lessons_template.render(
         lessons=lessons,
         title=course_title)
-    with open(os.path.join(course_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
+    with open(os.path.join(course_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
         fh.write(output_from_parsed_template)
     if not lessons:
         courses.remove(course)
