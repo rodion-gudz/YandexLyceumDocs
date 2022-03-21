@@ -34,14 +34,14 @@ os.makedirs(os.path.join('docs', 'courses'))
 
 
 def save_courses_page(courses):
-    with open(os.path.join('docs', 'index.html'), "w") as fh:
+    with open(os.path.join('docs', 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
         fh.write(courses_template.render(courses=courses))
 
 
 def save_lesson_page(materials, course_id, lesson_id):
     lesson_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id))
     os.mkdir(lesson_path)
-    with open(os.path.join(lesson_path, 'index.html'), "w") as fh:
+    with open(os.path.join(lesson_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
         fh.write(materials_template.render(materials=materials))
 
 
@@ -49,7 +49,7 @@ def save_material_page(content, shortTitle, title, course_id, lesson_id, materia
     material_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id), 'materials',
                                  str(material_id))
     os.mkdir(material_path)
-    with open(os.path.join(material_path, 'index.html'), "w") as fh:
+    with open(os.path.join(material_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
         fh.write(material_template.render(
             content=content or "",
             shortTitle=shortTitle,
@@ -59,35 +59,40 @@ def save_material_page(content, shortTitle, title, course_id, lesson_id, materia
 print()
 print("Скачивание курсов...")
 for course in courses:
-    course_path = os.path.join('docs', 'courses', str(course['course_id']))
-    lessons = client.get_course(course['course_id'], course['group_id'])
+    course_id = course['course_id']
+    group_id = course['group_id']
+    course_title = course['title']
+
+    course_path = os.path.join('docs', 'courses', str(course_id))
+    lessons = client.get_course(course_id, group_id)
     lessons_path = os.path.join(course_path, 'lessons')
     os.makedirs(lessons_path)
     for lesson in tqdm(lessons,
                        unit='course',
                        bar_format='{l_bar}{bar}| [{remaining}]',
-                       desc=course['title']):
+                       desc=course_title):
         if not isinstance(lesson, dict) or lesson['type'] != 'normal':
             continue
         materials = client.get_materials_id(lesson['id'])
         lesson['has_materials'] = bool(materials)
         if not materials:
             continue
-        save_lesson_page(materials, course['course_id'], lesson['id'])
+        save_lesson_page(materials, course_id, lesson['id'])
         os.mkdir(os.path.join(lessons_path, str(lesson['id']), 'materials'))
         for material in materials:
-            material = client.get_material(lesson['id'], course['group_id'], material['id'])
-            if 'detailedMaterial' not in material:
+            material_id = material['id']
+            content = client.get_material(lesson['id'], group_id, material_id)
+            if 'detailedMaterial' not in content:
                 continue
 
-            save_material_page(material['detailedMaterial']['content'], material['lesson']['shortTitle'],
-                               material['detailedMaterial']['title'],
-                               course['course_id'], lesson['id'], material['detailedMaterial']['id'])
+            save_material_page(content['detailedMaterial']['content'], content['lesson']['shortTitle'],
+                               content['detailedMaterial']['title'],
+                               course_id, lesson['id'], content['detailedMaterial']['id'])
 
     output_from_parsed_template = lessons_template.render(
         lessons=lessons,
-        title=course['title'])
-    with open(os.path.join(course_path, 'index.html'), "w") as fh:
+        title=course_title)
+    with open(os.path.join(course_path, 'index.html'), "w", encoding='windows-1252' if os.name == 'nt' else 'utf-8') as fh:
         fh.write(output_from_parsed_template)
     if not lessons:
         courses.remove(course)
