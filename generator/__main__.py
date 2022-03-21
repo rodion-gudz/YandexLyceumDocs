@@ -34,26 +34,43 @@ os.makedirs(os.path.join('docs', 'courses'))
 
 
 def save_courses_page(courses):
-    with open(os.path.join('docs', 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
-        fh.write(courses_template.render(courses=courses))
+    for enc in ['utf-8', 'windows-1252', 'windows-1250', 'ascii']:
+        try:
+            with open(os.path.join('docs', 'index.html'), "w", encoding=enc) as fh:
+                fh.write(courses_template.render(courses=courses))
+            break
+        except UnicodeEncodeError:
+            pass
 
 
 def save_lesson_page(materials, course_id, lesson_id):
     lesson_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id))
     os.mkdir(lesson_path)
-    with open(os.path.join(lesson_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
-        fh.write(materials_template.render(materials=materials))
+    for enc in ['utf-8', 'windows-1252', 'windows-1250', 'ascii']:
+        try:
+            with open(os.path.join(lesson_path, 'index.html'), "w",
+                      encoding=enc) as fh:
+                fh.write(materials_template.render(materials=materials))
+            break
+        except UnicodeEncodeError:
+            pass
 
 
 def save_material_page(content, shortTitle, title, course_id, lesson_id, material_id):
     material_path = os.path.join('docs', 'courses', str(course_id), 'lessons', str(lesson_id), 'materials',
                                  str(material_id))
     os.mkdir(material_path)
-    with open(os.path.join(material_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
-        fh.write(material_template.render(
-            content=content or "",
-            shortTitle=shortTitle,
-            title=title))
+    for enc in ['utf-8', 'windows-1252', 'windows-1250', 'ascii']:
+        try:
+            with open(os.path.join(material_path, 'index.html'), "w",
+                      encoding=enc) as fh:
+                fh.write(material_template.render(
+                    content=content or "",
+                    shortTitle=shortTitle,
+                    title=title))
+            break
+        except UnicodeEncodeError:
+            pass
 
 
 print()
@@ -92,8 +109,13 @@ for course in courses:
     output_from_parsed_template = lessons_template.render(
         lessons=lessons,
         title=course_title)
-    with open(os.path.join(course_path, 'index.html'), "w", encoding=('windows-1252' if os.name == 'nt' else 'utf-8')) as fh:
-        fh.write(output_from_parsed_template)
+    for enc in ['utf-8', 'windows-1252', 'windows-1250', 'ascii']:
+        try:
+            with open(os.path.join(course_path, 'index.html'), "w", encoding=enc) as fh:
+                fh.write(output_from_parsed_template)
+            break
+        except UnicodeEncodeError:
+            pass
     if not lessons:
         courses.remove(course)
 
