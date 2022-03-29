@@ -25,7 +25,7 @@ client = Client(login=args.login,
                 password=args.password)
 courses = client.get_courses()
 print("Список курсов:")
-courses = [course for course in courses if input(f"{course['title']}\t(Y/n) ").lower().strip() in ('Y', '')]
+courses = [course for course in courses if input(f"{course['title']}\t(Y/n) ").lower().strip() in ('y', '')]
 
 if os.path.exists('docs'):
     shutil.rmtree('docs')
