@@ -15,7 +15,7 @@
 * `git clone https://github.com/fast-geek/YandexLyceumDocs.git`
 * `cd YandexLyceumDocs`
 * `pip install -r requirements.txt`
-* `python -m generator --login user --pasword pass`
+* `python -m generator --login <YANDEX_USERNAME> --password <YANDEX_PASSWORD>`
 * `cd docs`
 * `python -m http.server 8000`
 > Переходим на http://localhost:8000
