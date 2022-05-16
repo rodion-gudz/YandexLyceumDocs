@@ -88,6 +88,6 @@ class Client:
 
     def get_lesson_info(self, lesson_id, course_id, group_id):
         return self.session.get(
-                f"https://lyceum.yandex.ru/api/student/lessons/{lesson_id}",
-                params={"courseId": course_id, "groupId": group_id},
+            f"https://lyceum.yandex.ru/api/student/lessons/{lesson_id}",
+            params={"courseId": course_id, "groupId": group_id},
         ).json()
