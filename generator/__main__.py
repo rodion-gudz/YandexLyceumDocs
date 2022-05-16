@@ -33,6 +33,7 @@ if os.path.exists('docs'):
 os.makedirs(os.path.join('docs', 'courses'))
 
 
+
 def save_courses_page(courses):
     for enc in ['utf-8', 'windows-1252', 'windows-1250', 'ascii']:
         try:

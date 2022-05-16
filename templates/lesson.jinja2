@@ -1,5 +1,10 @@
 {% extends "base.jinja2" %}
-{% block title %}Материалы{% endblock %}
+{% block title %}Урок "{{ lesson_titletle }}"{% endblock %}
+
+{% block material_style %}
+    <link rel="stylesheet"
+          href="https://yastatic.net/s3/lyceum/frontend/static/59.0-rc-a079b43e/desktop-ru/vendors.css">
+{% endblock %}
 
 {% block content %}
 	<div class="layout__wrapper layout__wrapper_type_wide">
