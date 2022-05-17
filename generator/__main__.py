@@ -35,6 +35,8 @@ if os.path.exists("docs"):
     shutil.rmtree("docs")
 
 os.makedirs(os.path.join("docs", "courses"))
+shutil.copytree(os.path.join("templates", "css"), os.path.join("docs", "css"))
+shutil.copytree(os.path.join("templates", "js"), os.path.join("docs", "js"))
 
 sections_types = {
     "classwork": "Классная работа",
