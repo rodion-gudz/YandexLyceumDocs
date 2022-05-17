@@ -1,91 +1,90 @@
 {% extends "base.jinja2" %}
 {% block title %}Урок "{{ lesson_titletle }}"{% endblock %}
 
-{% block material_style %}
-    <link rel="stylesheet"
-          href="https://yastatic.net/s3/lyceum/frontend/static/59.0-rc-a079b43e/desktop-ru/vendors.css">
+{% block custom_css %}
+	<link rel="stylesheet" href="/css/vendors.css">
 {% endblock %}
 
 {% block content %}
-    <div class="layout">
-        <div class="layout__wrapper layout__wrapper_type_wide">
-            <div class="layout__top">
-                <header class="lesson-header">
-                    <a class="nav-tab nav-tab_back nav-tab_view_button"
-                       href="../..">
+	<div class="layout">
+		<div class="layout__wrapper layout__wrapper_type_wide">
+			<div class="layout__top">
+				<header class="lesson-header">
+					<a class="nav-tab nav-tab_back nav-tab_view_button"
+					   href="../..">
 					<span data-lego="react"
-                          class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
-                        <span class="nav-tab__inner">Назад</span>
-                    </a>
-                    <h1 class="heading heading_level_1 lesson-header__heading">{{ lesson_titletle }}</h1>
-                    <div class="lesson-header__description">
-                        <div class="html-content">{{ lesson_description }}</div>
-                    </div>
-                </header>
-            </div>
-            <main class="layout__main">
-                <div class="student-task-list">
-                    <h2 class="heading heading_level_2 student-task-list__heading">
-                        Задачи</h2>
-                    {% if task_groups %}
-                        <ul class="Accordion">
-                            {% for task_group in task_groups %}
-                                <ul role="group"
-                                    class="Accordion-Group">
-                                    <li aria-hidden="true"
-                                        class="Accordion-Title">
-                                        <header class="task-group-header">
-                                            <span class="task-tag task-tag_type_{{ task_group['type'] }} task-tag_size_m task-group-header__icon"></span>
-                                            <h3 class="heading heading_level_3 task-group-header__heading">{{ task_group['full_type'] }}</h3>
-                                        </header>
-                                    </li>
-                                    {% for task in task_group['tasks'] %}
+					      class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
+						<span class="nav-tab__inner">Назад</span>
+					</a>
+					<h1 class="heading heading_level_1 lesson-header__heading">{{ lesson_titletle }}</h1>
+					<div class="lesson-header__description">
+						<div class="html-content">{{ lesson_description }}</div>
+					</div>
+				</header>
+			</div>
+			<main class="layout__main">
+				<div class="student-task-list">
+					<h2 class="heading heading_level_2 student-task-list__heading">
+						Задачи</h2>
+					{% if task_groups %}
+						<ul class="Accordion">
+							{% for task_group in task_groups %}
+								<ul role="group"
+								    class="Accordion-Group">
+									<li aria-hidden="true"
+									    class="Accordion-Title">
+										<header class="task-group-header">
+											<span class="task-tag task-tag_type_{{ task_group['type'] }} task-tag_size_m task-group-header__icon"></span>
+											<h3 class="heading heading_level_3 task-group-header__heading">{{ task_group['full_type'] }}</h3>
+										</header>
+									</li>
+									{% for task in task_group['tasks'] %}
 
-                                            <li class="Accordion-Item">
-                                                <a class="student-task-list__task"
-                                                   {% if task['active'] %} href="tasks/{{ task['id'] }}" {% endif %}>
-                                                    <div class="student-task-list__left">
-                                                        <h4 class="heading heading_level_4 student-task-list__task-heading">{{ task['title'] }}</h4>
-                                                    </div>
-                                                </a>
-                                            </li>
+										<li class="Accordion-Item">
+											<a class="student-task-list__task"
+													{% if task['active'] %} href="tasks/{{ task['id'] }}" {% endif %}>
+												<div class="student-task-list__left">
+													<h4 class="heading heading_level_4 student-task-list__task-heading">{{ task['title'] }}</h4>
+												</div>
+											</a>
+										</li>
 
-                                    {% endfor %}
-                                </ul>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        В уроке ещё нет задач
-                    {% endif %}
-                </div>
-            </main>
-            <aside class="layout__aside">
-                <section class="aside-section">
-                    <h1 class="heading heading_level_1">Материалы</h1>
-                    <div class="aside-section__body">
-                        <div class="material-list">
-                            {% if materials %}
-                                <ul class="material-list__list">
-                                    {% for material in materials %}
-                                        <li class="material-list__item">
-                                            <a class="material-list__material-link"
-                                               href="materials/{{ material['id'] }}">
-                                                <div aria-hidden="true"
-                                                     class="material-list__icon material-list__icon_type_textbook"></div>
-                                                <div class="material-list__material-title">{{ material['title'] }}</div>
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                <div class="material-list__message">
-                                    Материалов нет
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </section>
-            </aside>
-        </div>
-    </div>
+									{% endfor %}
+								</ul>
+							{% endfor %}
+						</ul>
+					{% else %}
+						В уроке ещё нет задач
+					{% endif %}
+				</div>
+			</main>
+			<aside class="layout__aside">
+				<section class="aside-section">
+					<h1 class="heading heading_level_1">Материалы</h1>
+					<div class="aside-section__body">
+						<div class="material-list">
+							{% if materials %}
+								<ul class="material-list__list">
+									{% for material in materials %}
+										<li class="material-list__item">
+											<a class="material-list__material-link"
+											   href="materials/{{ material['id'] }}">
+												<div aria-hidden="true"
+												     class="material-list__icon material-list__icon_type_textbook"></div>
+												<div class="material-list__material-title">{{ material['title'] }}</div>
+											</a>
+										</li>
+									{% endfor %}
+								</ul>
+							{% else %}
+								<div class="material-list__message">
+									Материалов нет
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</section>
+			</aside>
+		</div>
+	</div>
 {% endblock %}

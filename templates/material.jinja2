@@ -1,8 +1,8 @@
 {% extends "base.jinja2" %}
 {% block title %}{{ title }}{% endblock %}
-{% block material_style %}
-	<link rel="stylesheet"
-	      href="https://yastatic.net/s3/lyceum/frontend/static/59.0-rc-a079b43e/desktop-ru/material.css">
+{% block custom_css %}
+	<link rel="stylesheet" href="/css/material.css">
+	<link rel="stylesheet" href="/css/prism.css"  />
 {% endblock %}
 
 {% block content %}
@@ -24,4 +24,5 @@
 			</div>
 		</div>
 	</div>
+	<script src="/js/prism.js"></script>
 {% endblock %}
