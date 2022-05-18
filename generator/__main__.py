@@ -227,6 +227,7 @@ for course in courses:
                     solution_url = solution_info["solution"]["latestSubmission"]["file"]["url"]
                 else:
                     solution_code = None
+                    solution_url = None
                 save_task_page(
                     lesson_id=lesson["id"],
                     task_id=task["id"],
