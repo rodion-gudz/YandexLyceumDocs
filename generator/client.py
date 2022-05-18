@@ -91,3 +91,9 @@ class Client:
             f"https://lyceum.yandex.ru/api/student/lessons/{lesson_id}",
             params={"courseId": course_id, "groupId": group_id},
         ).json()
+
+    def get_solution(self, solution_id):
+        return self.session.get(
+                f"https://lyceum.yandex.ru/api/student/solutions/{solution_id}"
+            ).json()
+

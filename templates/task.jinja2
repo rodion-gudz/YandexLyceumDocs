@@ -3,7 +3,7 @@
 
 {% block custom_css %}
     <link rel="stylesheet" href="/css/vendors.css">
-	<link rel="stylesheet" href="/css/prism.css"  />
+    <link rel="stylesheet" href="/css/prism.css"/>
 {% endblock %}
 
 {% block content %}
@@ -41,6 +41,12 @@
                 <section class="y6c2ac--task-description">
                     <article class="y6c2ac--task-description__content">
                         {{ task_description }}
+                        <h2>Решение</h2>
+                        <a class="nav-tab nav-tab_back nav-tab_view_button"
+                           href="{{ solution_url }}"><span data-lego="react"
+                                                           class="icon icon_type_arrow-short icon_direction_down icon_size_s nav-tab__arrow-icon"></span><span
+                                class="nav-tab__inner">Скачать</span></a>
+
                     </article>
                 </section>
             </main>
@@ -77,5 +83,5 @@
             </nav>
         </aside>
     </div>
-	<script src="/js/prism.js"></script>
+    <script src="/js/prism.js"></script>
 {% endblock %}
