@@ -223,8 +223,11 @@ for course in courses:
                 solution_id = task_info["solutionId"]
                 solution_info = client.get_solution(solution_id)
                 if solution_info["solution"]["status"]["type"] != "new" and solution_info["solution"]["score"] != 0:
-                    solution_code = solution_info["solution"]["latestSubmission"]["file"]["sourceCode"].strip()
                     solution_url = solution_info["solution"]["latestSubmission"]["file"]["url"]
+                    if "sourceCode" in solution_info["solution"]["latestSubmission"]["file"]:
+                        solution_code = solution_info["solution"]["latestSubmission"]["file"]["sourceCode"].strip()
+                    else:
+                        solution_code = None
                 else:
                     solution_code = None
                     solution_url = None
