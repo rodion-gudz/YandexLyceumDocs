@@ -98,6 +98,8 @@ def save_task_page(
     task_title,
     task_description,
     lesson_tasks_ids,
+    solution_code,
+    solution_url
 ):
     task_path = os.path.join(
         "docs",
@@ -137,6 +139,8 @@ def save_task_page(
                 task_description=task_description,
                 task_groups=lesson_tasks_ids,
                 task_id=task_id,
+                solution_code=solution_code,
+                solution_url=solution_url,
             )
         )
 
@@ -216,6 +220,17 @@ for course in courses:
                 task_info = client.get_task_information(group_id, task["id"])
                 if "code" in task_info and task_info["code"] == "404_task_not_found":
                     continue
+                solution_id = task_info["solutionId"]
+                solution_info = client.get_solution(solution_id)
+                if solution_info["solution"]["status"]["type"] != "new" and solution_info["solution"]["score"] != 0:
+                    solution_url = solution_info["solution"]["latestSubmission"]["file"]["url"]
+                    if "sourceCode" in solution_info["solution"]["latestSubmission"]["file"]:
+                        solution_code = solution_info["solution"]["latestSubmission"]["file"]["sourceCode"].strip()
+                    else:
+                        solution_code = None
+                else:
+                    solution_code = None
+                    solution_url = None
                 save_task_page(
                     lesson_id=lesson["id"],
                     task_id=task["id"],
@@ -225,6 +240,8 @@ for course in courses:
                     task_title=task["title"],
                     task_description=task_info["description"],
                     lesson_tasks_ids=lesson_tasks_formatted,
+                    solution_code=solution_code,
+                    solution_url=solution_url,
                 )
 
         if materials:
