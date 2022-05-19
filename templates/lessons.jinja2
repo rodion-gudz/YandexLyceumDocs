@@ -2,42 +2,45 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="layout__wrapper layout__wrapper_type_wide">
-        <p>
-            <a class="nav-tab nav-tab_back nav-tab_view_button" href="../..">
+	<div class="layout">
+		<div class="layout__wrapper layout__wrapper_type_wide">
+			<p>
+				<a class="nav-tab nav-tab_back nav-tab_view_button" href="../..">
 					<span data-lego="react"
-                          class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
-                <span class="nav-tab__inner">Назад</span>
-            </a>
-        </p>
-        <div class="layout__top">
-            <main class="course-details__top-main">
-                <h1 class="heading heading_level_1">{{ title }}</h1>
-            </main>
-        </div>
-        <main class="layout__main">
-            <section class="lessons-dashboard"><h2
-                    class="heading heading_level_2">Уроки</h2>
-                <br>
-                <div class="lessons-dashboard__content-wrapper">
-                    <ul class="link-list link-list_type_main">
-                        {% for lesson in lessons %}
-                            <li class="link-list__item">
-                                <a class="link-list__link"
-                                   href="lessons/{{ lesson['id'] }}"
-                                   style="min-height: auto">
-                                    <div class="lesson-card">
-                                        <div class="lesson-card__lesson">
-                                            <h4 class="lesson-card__lesson-title">{{ lesson['title'] }}</h4>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </section>
-        </main>
-        <aside class="layout__aside"></aside>
-    </div>
+					      class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
+					<span class="nav-tab__inner">Назад</span>
+				</a>
+			</p>
+			<div class="layout__top">
+				<main class="course-details__top-main">
+					<h1 class="heading heading_level_1">{{ title }}</h1>
+				</main>
+			</div>
+			<main class="layout__main">
+				<section class="lessons-dashboard"><h2
+						class="heading heading_level_2">Уроки</h2>
+					<br>
+					<div class="lessons-dashboard__content-wrapper">
+						<ul class="link-list link-list_type_main">
+							{% for lesson in lessons %}
+								<li class="link-list__item">
+									<a class="link-list__link"
+									   href="lessons/{{ lesson['id'] }}"
+									   style="min-height: auto">
+										<div class="lesson-card">
+											<div class="lesson-card__lesson">
+												<h4 class="lesson-card__lesson-title">{{ lesson['title'] }}</h4>
+											</div>
+										</div>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</section>
+			</main>
+			<aside class="layout__aside"></aside>
+		</div>
+	</div>
+	{% include "includes/footer.html" %}
 {% endblock %}
