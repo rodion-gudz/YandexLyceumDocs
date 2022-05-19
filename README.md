@@ -15,22 +15,22 @@
 ## Использование
 * Клонируем [репозиторий](https://github.com/fast-geek/YandexLyceumDocs)
 ```shell
-  git clone https://github.com/fast-geek/YandexLyceumDocs.git
+git clone https://github.com/fast-geek/YandexLyceumDocs.git
 ```
 * Переходим в каталог репозитория и устанавливаем зависимости
 ```shell
-  cd YandexLyceumDocs
-  pip install -r requirements.txt
+cd YandexLyceumDocs
+pip install -r requirements.txt
 ```
 * Запускаем программу с логином и паролем аккаунта Yandex
 ```shell
-  python -m generator --login "YANDEX_USERNAME" --password "YANDEX_PASSWORD"
+python -m generator --login "YANDEX_USERNAME" --password "YANDEX_PASSWORD"
 ```
 * Выбираем необходимые курсы и ждём окончания работы программы
 * Переходим в новую папку `docs` и запускаем статический сервер Python
 ```shell
-  cd docs
-  python -m http.server 8000
+cd docs
+python -m http.server 8000
 ```
 * Переходим на [localhost:8000](http://localhost:8000)
 
