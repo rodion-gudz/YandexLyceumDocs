@@ -6,6 +6,7 @@ import shutil
 from tqdm import tqdm
 
 from generator.client import Client
+from generator.docs_prepare import format_lesson_tasks, prepare_materials
 from generator.page_savers import save_lesson_page, save_task_page, \
     save_material_page, save_courses_page, lessons_template
 from generator.stuff import sections_types
@@ -13,6 +14,7 @@ from generator.stuff import sections_types
 parser = argparse.ArgumentParser(description="yandex lyceum docs generator")
 parser.add_argument("--login", type=str, required=True)
 parser.add_argument("--password", type=str, required=True)
+parser.add_argument('--materials', action="store_true")
 args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)
@@ -56,40 +58,14 @@ for course in courses:
     ):
 
         lesson_tasks = client.get_tasks(course_id, lesson["id"], group_id)
+        lesson_tasks_formatted = format_lesson_tasks(lesson_tasks)
 
-        try:
-            lesson_tasks_formatted = [
-                {
-                    "type": task_group["type"],
-                    "full_type": sections_types[task_group["type"]],
-                    "tasks": [
-                        {"id": task["id"], "title": task["title"], "active": True}
-                        for task in task_group["tasks"]
-                    ],
-                }
-                for task_group in lesson_tasks
-            ]
-        except Exception:
-            lesson_tasks_formatted = [
-                {
-                    "type": task_group["type"],
-                    "full_type": "Вступительный тест",
-                    "tasks": [
-                        {"id": task["id"], "title": task["title"], "active": False}
-                        for task in task_group["problems"]
-                    ],
-                }
-                for task_group in lesson_tasks
-            ]
-
-        materials = client.get_materials_id(lesson["id"])
-
-        if materials == 0:
-            materials = None
+        add_materials, materials = prepare_materials(client, args.materials, lesson["id"])
 
         lesson_information = client.get_lesson_info(lesson["id"], course_id, group_id)
 
         save_lesson_page(
+            add_materials,
             materials,
             course_id,
             lesson["id"],

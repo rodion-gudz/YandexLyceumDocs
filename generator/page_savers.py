@@ -10,7 +10,7 @@ def save_courses_page(courses):
 
 
 def save_lesson_page(
-    materials, course_id, lesson_id, lesson_tasks_ids, lesson_title, lesson_description
+    add_materials, materials, course_id, lesson_id, lesson_tasks_ids, lesson_title, lesson_description
 ):
     lesson_path = os.path.join(
         "docs", "courses", str(course_id), "lessons", str(lesson_id)
@@ -19,6 +19,7 @@ def save_lesson_page(
     with open(os.path.join(lesson_path, "index.html"), "w", encoding="utf-8") as fh:
         fh.write(
             lesson_template.render(
+                add_materials=add_materials,
                 materials=materials,
                 task_groups=lesson_tasks_ids,
                 lesson_titletle=lesson_title,
