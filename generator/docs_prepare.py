@@ -43,3 +43,24 @@ def prepare_materials(client, arg, lesson_id):
         materials = None
 
     return add_materials, materials
+
+
+def prepare_solution(client, solution_id):
+    solution_info = client.get_solution(solution_id)
+    solution = {}
+    if solution_info["solution"]["status"]["type"] != "new" and \
+            solution_info["solution"]["score"] != 0:
+        solution["url"] = solution_info["solution"]["latestSubmission"]["file"][
+            "url"]
+        if "sourceCode" in solution_info["solution"]["latestSubmission"][
+            "file"]:
+            solution["code"] = \
+            solution_info["solution"]["latestSubmission"]["file"][
+                "sourceCode"].strip()
+        else:
+            solution["code"] = None
+    else:
+        solution["code"] = None
+        solution["url"] = None
+
+    return solution

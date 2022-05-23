@@ -57,6 +57,7 @@ def save_task_page(
     task_title,
     task_description,
     lesson_tasks_ids,
+    add_solution,
     solution_code,
     solution_url
 ):
@@ -98,6 +99,7 @@ def save_task_page(
                 task_description=task_description,
                 task_groups=lesson_tasks_ids,
                 task_id=task_id,
+                add_solution=add_solution,
                 solution_code=solution_code,
                 solution_url=solution_url,
             )
