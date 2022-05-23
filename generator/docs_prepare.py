@@ -52,10 +52,10 @@ def prepare_solution(client, solution_id):
             solution_info["solution"]["score"] != 0:
         solution["url"] = solution_info["solution"]["latestSubmission"]["file"][
             "url"]
-        if "sourceCode" in solution_info["solution"]["latestSubmission"][
-            "file"]:
+        if "sourceCode" in \
+                solution_info["solution"]["latestSubmission"]["file"]:
             solution["code"] = \
-            solution_info["solution"]["latestSubmission"]["file"][
+                solution_info["solution"]["latestSubmission"]["file"][
                 "sourceCode"].strip()
         else:
             solution["code"] = None
