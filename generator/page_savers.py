@@ -10,13 +10,15 @@ def save_courses_page(courses):
 
 
 def save_lesson_page(
-    add_materials, materials, course_id, lesson_id, lesson_tasks_ids, lesson_title, lesson_description
+        add_materials, materials, course_id, lesson_id, lesson_tasks_ids,
+        lesson_title, lesson_description
 ):
     lesson_path = os.path.join(
         "docs", "courses", str(course_id), "lessons", str(lesson_id)
     )
     os.mkdir(lesson_path)
-    with open(os.path.join(lesson_path, "index.html"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(lesson_path, "index.html"), "w",
+              encoding="utf-8") as fh:
         fh.write(
             lesson_template.render(
                 add_materials=add_materials,
@@ -28,7 +30,8 @@ def save_lesson_page(
         )
 
 
-def save_material_page(content, short_title, title, course_id, lesson_id, material_id):
+def save_material_page(content, short_title, title, course_id, lesson_id,
+                       material_id):
     material_path = os.path.join(
         "docs",
         "courses",
@@ -39,7 +42,8 @@ def save_material_page(content, short_title, title, course_id, lesson_id, materi
         str(material_id),
     )
     os.mkdir(material_path)
-    with open(os.path.join(material_path, "index.html"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(material_path, "index.html"), "w",
+              encoding="utf-8") as fh:
         fh.write(
             material_template.render(
                 content=content or "", short_title=short_title, title=title
@@ -48,18 +52,18 @@ def save_material_page(content, short_title, title, course_id, lesson_id, materi
 
 
 def save_task_page(
-    lesson_id,
-    course_id,
-    task_id,
-    title,
-    lesson_short_title,
-    task_type,
-    task_title,
-    task_description,
-    lesson_tasks_ids,
-    add_solution,
-    solution_code,
-    solution_url
+        lesson_id,
+        course_id,
+        task_id,
+        title,
+        lesson_short_title,
+        task_type,
+        task_title,
+        task_description,
+        lesson_tasks_ids,
+        add_solution,
+        solution_code,
+        solution_url
 ):
     task_path = os.path.join(
         "docs",
@@ -86,7 +90,8 @@ def save_task_page(
     else:
         next_task_id = task_ids[task_ids.index(task_id) + 1]
 
-    with open(os.path.join(task_path, "index.html"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(task_path, "index.html"), "w",
+              encoding="utf-8") as fh:
         fh.write(
             task_template.render(
                 title=title,

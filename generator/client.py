@@ -11,13 +11,14 @@ class Client:
         session = Session()
         if not os.path.exists("auth.session"):
             if (
-                session.post(
-                    "https://passport.yandex.ru/passport?mode=auth",
-                    data={"login": login, "passwd": password},
-                ).url
-                != "https://passport.yandex.ru/profile"
+                    session.post(
+                        "https://passport.yandex.ru/passport?mode=auth",
+                        data={"login": login, "passwd": password},
+                    ).url
+                    != "https://passport.yandex.ru/profile"
             ):
-                raise AuthError("Ошибка авторизации (Неверные данные или включен 2FA)")
+                raise AuthError(
+                    "Ошибка авторизации (Неверные данные или включен 2FA)")
             with open("auth.session", "wb") as f:
                 pickle.dump(session, f)
         else:
@@ -45,7 +46,8 @@ class Client:
 
     def get_course(self, course_id, group_id):
         return self.session.get(
-            f"https://lyceum.yandex.ru/api/student/lessons?courseId={course_id}&groupId={group_id}"
+            f"https://lyceum.yandex.ru/api/student/lessons?courseId="
+            f"{course_id}&groupId={group_id}"
         ).json()
 
     def get_lessons(self, course_id, group_id):
@@ -63,9 +65,9 @@ class Client:
     def get_materials_id(self, lesson_id):
         url = "https://lyceum.yandex.ru/api/materials"
         if not (
-            material_info := self.session.get(
-                url, params={"lessonId": lesson_id}
-            ).json()
+                material_info := self.session.get(
+                    url, params={"lessonId": lesson_id}
+                ).json()
         ):
             return 0
         return [
@@ -83,7 +85,8 @@ class Client:
     def get_tasks(self, course_id, lesson_id, group_id):
         return self.session.get(
             "https://lyceum.yandex.ru/api/student/lessonTasks",
-            params={"courseId": course_id, "groupId": group_id, "lessonId": lesson_id},
+            params={"courseId": course_id, "groupId": group_id,
+                    "lessonId": lesson_id},
         ).json()
 
     def get_lesson_info(self, lesson_id, course_id, group_id):
@@ -94,6 +97,5 @@ class Client:
 
     def get_solution(self, solution_id):
         return self.session.get(
-                f"https://lyceum.yandex.ru/api/student/solutions/{solution_id}"
-            ).json()
-
+            f"https://lyceum.yandex.ru/api/student/solutions/{solution_id}"
+        ).json()
