@@ -5,16 +5,24 @@ import shutil
 from tqdm import tqdm
 
 from generator.client import Client
-from generator.docs_prepare import format_lesson_tasks, prepare_materials, \
-    prepare_solution
-from generator.page_savers import save_lesson_page, save_task_page, \
-    save_material_page, save_courses_page, lessons_template
+from generator.docs_prepare import (
+    format_lesson_tasks,
+    prepare_materials,
+    prepare_solution,
+)
+from generator.page_savers import (
+    lessons_template,
+    save_courses_page,
+    save_lesson_page,
+    save_material_page,
+    save_task_page,
+)
 
 parser = argparse.ArgumentParser(description="yandex lyceum docs generator")
 parser.add_argument("--login", type=str, required=True)
 parser.add_argument("--password", type=str, required=True)
-parser.add_argument('--materials', action="store_true")
-parser.add_argument('--solutions', action="store_true")
+parser.add_argument("--materials", action="store_true")
+parser.add_argument("--solutions", action="store_true")
 args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)
@@ -26,8 +34,7 @@ if not courses:
 
 print("Список курсов:")
 courses = [
-    course
-    for course in courses
+    course for course in courses
     if input(f"{course['title']}\t(Y/n) ").lower().strip() in ("y", "")
 ]
 
@@ -47,8 +54,8 @@ for course in courses:
 
     course_path = os.path.join("docs", "courses", str(course_id))
     lessons = client.get_course(course_id, group_id)
-    if "code" in lessons and lessons["code"] \
-            == "403_course_view_permission_denied":
+    if "code" in lessons and lessons[
+            "code"] == "403_course_view_permission_denied":
         course["active"] = False
         print(f"{course_title} не доступен")
         continue
@@ -88,8 +95,8 @@ for course in courses:
             tasks = task_group["tasks"]
             for task in tasks:
                 task_info = client.get_task_information(group_id, task["id"])
-                if "code" in task_info and task_info["code"] \
-                        == "404_task_not_found":
+                if "code" in task_info and task_info[
+                        "code"] == "404_task_not_found":
                     continue
 
                 solution_id = task_info["solutionId"]
@@ -112,7 +119,8 @@ for course in courses:
                 )
 
         if materials:
-            os.mkdir(os.path.join(lessons_path, str(lesson["id"]), "materials"))
+            os.mkdir(os.path.join(lessons_path, str(lesson["id"]),
+                                  "materials"))
             for material in materials:
                 material_id = material["id"]
                 content = client.get_material(lesson["id"], group_id,
@@ -129,9 +137,8 @@ for course in courses:
                     content["detailedMaterial"]["id"],
                 )
 
-    output_from_parsed_template = lessons_template.render(
-        lessons=lessons, title=course_title
-    )
+    output_from_parsed_template = lessons_template.render(lessons=lessons,
+                                                          title=course_title)
     with open(os.path.join(course_path, "index.html"), "w",
               encoding="utf-8") as fh:
         fh.write(output_from_parsed_template)

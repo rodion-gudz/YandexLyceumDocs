@@ -1,6 +1,7 @@
 import os
 
 from jinja2 import Environment, FileSystemLoader
+
 from generator.stuff import sections_types
 
 
@@ -10,12 +11,16 @@ def save_courses_page(courses):
 
 
 def save_lesson_page(
-        add_materials, materials, course_id, lesson_id, lesson_tasks_ids,
-        lesson_title, lesson_description
+    add_materials,
+    materials,
+    course_id,
+    lesson_id,
+    lesson_tasks_ids,
+    lesson_title,
+    lesson_description,
 ):
-    lesson_path = os.path.join(
-        "docs", "courses", str(course_id), "lessons", str(lesson_id)
-    )
+    lesson_path = os.path.join("docs", "courses", str(course_id), "lessons",
+                               str(lesson_id))
     os.mkdir(lesson_path)
     with open(os.path.join(lesson_path, "index.html"), "w",
               encoding="utf-8") as fh:
@@ -26,8 +31,7 @@ def save_lesson_page(
                 task_groups=lesson_tasks_ids,
                 lesson_titletle=lesson_title,
                 lesson_description=lesson_description,
-            )
-        )
+            ))
 
 
 def save_material_page(content, short_title, title, course_id, lesson_id,
@@ -45,25 +49,24 @@ def save_material_page(content, short_title, title, course_id, lesson_id,
     with open(os.path.join(material_path, "index.html"), "w",
               encoding="utf-8") as fh:
         fh.write(
-            material_template.render(
-                content=content or "", short_title=short_title, title=title
-            )
-        )
+            material_template.render(content=content or "",
+                                     short_title=short_title,
+                                     title=title))
 
 
 def save_task_page(
-        lesson_id,
-        course_id,
-        task_id,
-        title,
-        lesson_short_title,
-        task_type,
-        task_title,
-        task_description,
-        lesson_tasks_ids,
-        add_solution,
-        solution_code,
-        solution_url
+    lesson_id,
+    course_id,
+    task_id,
+    title,
+    lesson_short_title,
+    task_type,
+    task_title,
+    task_description,
+    lesson_tasks_ids,
+    add_solution,
+    solution_code,
+    solution_url,
 ):
     task_path = os.path.join(
         "docs",
@@ -107,13 +110,12 @@ def save_task_page(
                 add_solution=add_solution,
                 solution_code=solution_code,
                 solution_url=solution_url,
-            )
-        )
+            ))
 
 
-env = Environment(
-    loader=FileSystemLoader("templates"), trim_blocks=True, lstrip_blocks=True
-)
+env = Environment(loader=FileSystemLoader("templates"),
+                  trim_blocks=True,
+                  lstrip_blocks=True)
 courses_template = env.get_template("courses.jinja2")
 lesson_template = env.get_template("lesson.jinja2")
 material_template = env.get_template("material.jinja2")
