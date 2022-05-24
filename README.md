@@ -22,9 +22,10 @@ git clone https://github.com/fast-geek/YandexLyceumDocs.git
 cd YandexLyceumDocs
 pip install -r requirements.txt
 ```
-* Запускаем программу с логином и паролем аккаунта Yandex
+* Запускаем программу с логином и паролем аккаунта Yandex 
+  * Аргументы `--materials` и `--solutions` используются для загрузки материалов и решений (Опционально)
 ```shell
-python -m generator --login "YANDEX_USERNAME" --password "YANDEX_PASSWORD"
+python -m generator --login "YANDEX_USERNAME" --password "YANDEX_PASSWORD" --materials --solutions
 ```
 * Выбираем необходимые курсы и ждём окончания работы программы
 * Переходим в новую папку `docs` и запускаем статический сервер Python
