@@ -35,6 +35,10 @@ class Client:
                 "withExpelled": True,
             },
         ).json()
+
+        if "code" in profile_json and profile_json["code"] == "401_unauthorized":
+            return False
+
         return [
             {
                 "title": course["title"],
