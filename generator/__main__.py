@@ -27,6 +27,11 @@ args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)
 courses = client.get_courses()
+
+if not courses:
+    print("Нет доступа к yandex.lyceum.ru")
+    exit()
+
 print("Список курсов:")
 courses = [
     course for course in courses
