@@ -21,8 +21,9 @@ from generator.page_savers import (
 parser = argparse.ArgumentParser(description="yandex lyceum docs generator")
 parser.add_argument("--login", type=str, required=True)
 parser.add_argument("--password", type=str, required=True)
-parser.add_argument("--materials", action="store_true")
-parser.add_argument("--solutions", action="store_true")
+parser.add_argument('--materials', action="store_true")
+parser.add_argument('--solutions', action="store_true")
+parser.add_argument('--teacher', action="store_true")
 args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)

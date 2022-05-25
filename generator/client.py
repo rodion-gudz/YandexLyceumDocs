@@ -27,7 +27,7 @@ class Client:
                 session = pickle.load(f)
         self.session = session
 
-    def get_courses(self):
+    def get_courses(self, courses_type):
         profile_json = self.session.get(
             "https://lyceum.yandex.ru/api/profile",
             params={
@@ -45,7 +45,7 @@ class Client:
             "title": course["title"],
             "course_id": course["id"],
             "group_id": course["group"]["id"],
-        } for course in profile_json["coursesSummary"]["student"]]
+        } for course in profile_json["coursesSummary"][courses_type]
 
     def get_course(self, course_id, group_id):
         return self.session.get(
