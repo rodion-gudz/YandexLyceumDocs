@@ -37,17 +37,15 @@ class Client:
             },
         ).json()
 
-        if "code" in profile_json and profile_json["code"] == "401_unauthorized":
+        if "code" in profile_json and profile_json[
+                "code"] == "401_unauthorized":
             return False
 
-        return [
-            {
-                "title": course["title"],
-                "course_id": course["id"],
-                "group_id": course["group"]["id"],
-            }
-            for course in profile_json["coursesSummary"][courses_type]
-        ]
+        return [{
+            "title": course["title"],
+            "course_id": course["id"],
+            "group_id": course["group"]["id"],
+        } for course in profile_json["coursesSummary"][courses_type]
 
     def get_course(self, course_id, group_id):
         return self.session.get(
