@@ -24,6 +24,7 @@ pip install -r requirements.txt
 ```
 * Запускаем программу с логином и паролем аккаунта Yandex 
   * Аргументы `--materials` и `--solutions` используются для загрузки материалов и решений (Опционально)
+  * Аргумент `--teacher` используется для скачивания курсов в режиме учителя (Опционально)
 ```shell
 python -m generator --login "YANDEX_USERNAME" --password "YANDEX_PASSWORD" --materials --solutions
 ```

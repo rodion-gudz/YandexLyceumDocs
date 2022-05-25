@@ -15,10 +15,11 @@ parser.add_argument("--login", type=str, required=True)
 parser.add_argument("--password", type=str, required=True)
 parser.add_argument('--materials', action="store_true")
 parser.add_argument('--solutions', action="store_true")
+parser.add_argument('--teacher', action="store_true")
 args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)
-courses = client.get_courses()
+courses = client.get_courses("teacher" if args.teacher else "student")
 
 if not courses:
     print("Нет доступа к yandex.lyceum.ru")
