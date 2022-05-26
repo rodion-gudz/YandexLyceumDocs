@@ -45,7 +45,7 @@ class Client:
             "title": course["title"],
             "course_id": course["id"],
             "group_id": course["group"]["id"],
-        } for course in profile_json["coursesSummary"][courses_type]
+        } for course in profile_json["coursesSummary"][courses_type]]
 
     def get_course(self, course_id, group_id):
         return self.session.get(
