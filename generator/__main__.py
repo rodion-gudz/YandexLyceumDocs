@@ -27,7 +27,7 @@ parser.add_argument('--teacher', action="store_true")
 args = parser.parse_args()
 
 client = Client(login=args.login, password=args.password)
-courses = client.get_courses()
+courses = client.get_courses("teacher" if args.teacher else "student")
 
 if not courses:
     print("Нет доступа к yandex.lyceum.ru")
