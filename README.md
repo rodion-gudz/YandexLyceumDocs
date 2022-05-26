@@ -13,6 +13,18 @@
 </details>
 
 ## Использование
+* Перед началом необходимо проверить аккаунт Яндекса: вход должен быть только по паролю.
+  * Перейти в [настройки профиля](https://passport.yandex.ru).
+  * Найти пункт **Пароли и авторизация** -> **Способ входа**.
+  * Выбрать **"Вход с паролем"**.
+    <details>
+    <summary>Скриншот</summary>
+
+    ![Courses_Page](https://user-images.githubusercontent.com/70765138/170548269-2c22fc24-4dde-42db-8bc4-098ebc2b4135.jpeg)
+    
+    </details>
+  
+  
 * Клонируем [репозиторий](https://github.com/fast-geek/YandexLyceumDocs)
 ```shell
 git clone https://github.com/fast-geek/YandexLyceumDocs.git
