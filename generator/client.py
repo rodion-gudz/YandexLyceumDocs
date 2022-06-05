@@ -80,7 +80,7 @@ class Client:
         return [{
             "id": material["id"],
             "title": material["title"]
-        } for material in material_info if material["type"] == "textbook"]
+        } for material in material_info]
 
     def get_task_information(self, group_id, task_id):
         return self.session.get(
