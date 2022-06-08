@@ -1,149 +1,182 @@
-import argparse
 import os
 import shutil
 
+from PyYandexLMS.synchronous.client import Client
 from tqdm import tqdm
 
-from generator.client import Client
-from generator.docs_prepare import (
-    format_lesson_tasks,
-    prepare_materials,
-    prepare_solution,
-)
-from generator.page_savers import (
+from generator.args import parse_arguments
+from generator.render import render_page
+from generator.stuff import sections_types
+from generator.templates import (
+    courses_template,
     lessons_template,
-    save_courses_page,
-    save_lesson_page,
-    save_material_page,
-    save_task_page,
+    lesson_template,
+    task_template,
+    material_template,
 )
 
-parser = argparse.ArgumentParser(description="yandex lyceum docs generator")
-parser.add_argument("--login", type=str, required=True)
-parser.add_argument("--password", type=str, required=True)
-parser.add_argument("--materials", action="store_true")
-parser.add_argument("--solutions", action="store_true")
-parser.add_argument("--teacher", action="store_true")
-args = parser.parse_args()
+args = parse_arguments()
 
 client = Client(login=args.login, password=args.password)
-courses = client.get_courses("teacher" if args.teacher else "student")
 
-if not courses:
-    print("Нет доступа к yandex.lyceum.ru")
-    exit()
+user = client.get_user()
+
+courses = user.courses_summary.teacher if args.teacher else user.courses_summary.student
 
 print("Список курсов:")
+
 courses = [
-    course for course in courses
-    if input(f"{course['title']}\t(Y/n) ").lower().strip() in ("y", "")
+    course
+    for course in courses
+    if course.is_active
+    if input(f"{course.title}\t(Y/n) ").lower().strip() in ("y", "")
 ]
 
 if os.path.exists("docs"):
     shutil.rmtree("docs")
 
-os.makedirs(os.path.join("docs", "courses"))
-shutil.copytree(os.path.join("templates", "css"), os.path.join("docs", "css"))
-shutil.copytree(os.path.join("templates", "js"), os.path.join("docs", "js"))
+docs_path = "docs"
+
+render_page(
+    path=[docs_path],
+    template=courses_template,
+    courses=courses,
+)
+
+shutil.copytree(os.path.join("templates", "css"), os.path.join(docs_path, "css"))
+shutil.copytree(os.path.join("templates", "js"), os.path.join(docs_path, "js"))
+
+courses_path = os.path.join(docs_path, "courses")
+os.mkdir(courses_path)
 
 print()
 print("Скачивание курсов...")
 for course in courses:
-    course_id = course["course_id"]
-    group_id = course["group_id"]
-    course_title = course["title"]
+    course_path = os.path.join(courses_path, str(course.id))
 
-    course_path = os.path.join("docs", "courses", str(course_id))
-    lessons = client.get_course(course_id, group_id)
-    if "code" in lessons and lessons[
-            "code"] == "403_course_view_permission_denied":
-        course["active"] = False
-        print(f"{course_title} не доступен")
-        continue
-    course["active"] = True
+    lessons = client.get_lessons_by_course(course=course)
+
+    render_page(
+        path=[course_path],
+        template=lessons_template,
+        lessons=lessons,
+        title=course.title,
+    )
+
     lessons_path = os.path.join(course_path, "lessons")
     os.makedirs(lessons_path)
+
     for lesson in tqdm(
-            lessons,
-            unit="course",
-            bar_format="{l_bar}{bar}| [{remaining}]",
-            desc=course_title,
+        lessons,
+        unit="course",
+        bar_format="{l_bar}{bar}| [{remaining}]",
+        desc=course.title,
     ):
+        lesson_path = os.path.join(lessons_path, str(lesson.id))
 
-        lesson_tasks = client.get_tasks(course_id, lesson["id"], group_id)
-        lesson_tasks_formatted = format_lesson_tasks(lesson_tasks)
-
-        add_materials, materials = prepare_materials(client, args.materials,
-                                                     lesson["id"])
-
-        lesson_information = client.get_lesson_info(lesson["id"], course_id,
-                                                    group_id)
-
-        save_lesson_page(
-            add_materials,
-            materials,
-            course_id,
-            lesson["id"],
-            lesson_tasks_formatted,
-            lesson["title"],
-            lesson_information["description"],
+        task_groups = client.get_tasks(
+            lesson_id=lesson.id,
+            group_id=course.group.id,
+            course_id=course.id,
         )
 
-        os.mkdir(os.path.join(lessons_path, str(lesson["id"]), "tasks"))
+        materials = client.get_materials(
+            lesson_id=lesson.id,
+        )
 
-        for task_group in lesson_tasks_formatted:
-            task_type = task_group["type"]
-            tasks = task_group["tasks"]
-            for task in tasks:
-                task_info = client.get_task_information(group_id, task["id"])
-                if "code" in task_info and task_info[
-                        "code"] == "404_task_not_found":
-                    continue
+        lesson_information = client.get_lesson(
+            lesson_id=lesson.id,
+            group_id=course.group.id,
+            course_id=course.id,
+        )
 
-                solution_id = task_info["solutionId"]
-                add_solution, solution = args.solutions, prepare_solution(
-                    client, solution_id)
+        render_page(
+            path=[lessons_path, str(lesson.id)],
+            template=lesson_template,
+            lesson=lesson_information,
+            add_materials=args.materials,
+            materials=materials,
+            task_groups=task_groups,
+            sections_types=sections_types,
+        )
 
-                save_task_page(
-                    lesson_id=lesson["id"],
-                    course_id=course_id,
-                    task_id=task["id"],
-                    title=lesson["title"],
-                    lesson_short_title=lesson["shortTitle"],
-                    task_type=task_type,
-                    task_title=task["title"],
-                    task_description=task_info["description"],
-                    lesson_tasks_ids=lesson_tasks_formatted,
-                    add_solution=add_solution,
-                    solution_code=solution["code"],
-                    solution_url=solution["url"],
-                )
+        if task_groups:
+            tasks_path = os.path.join(lesson_path, "tasks")
+            os.mkdir(tasks_path)
+
+            task_ids = []
+            for task_group in task_groups:
+                if task_group.tasks:
+                    task_ids.extend(task.id for task in task_group.tasks)
+
+            for task_group in task_groups:
+                if task_group.tasks:
+                    for task in task_group.tasks:
+
+                        task_info = client.get_task(
+                            task_id=task.id,
+                            group_id=course.group.id,
+                        )
+
+                        solution_information = client.get_solution_information(
+                            solution_id=task_info.solution_id,
+                        )
+
+                        if hasattr(
+                            solution_information.solution.latest_submission, "file"
+                        ):
+                            solution_code = (
+                                solution_information.solution.latest_submission.file.source_code
+                            )
+                            solution_url = (
+                                solution_information.solution.latest_submission.file.url
+                            )
+                        else:
+                            solution_code = None
+                            solution_url = None
+
+                        task_index = task_ids.index(task.id)
+                        if task_index == 0:
+                            previous_task_id = None
+                        else:
+                            previous_task_id = task_ids[task_ids.index(task.id) - 1]
+                        if task_index == len(task_ids) - 1:
+                            next_task_id = None
+                        else:
+                            next_task_id = task_ids[task_ids.index(task.id) + 1]
+
+                        render_page(
+                            path=[tasks_path, str(task.id)],
+                            template=task_template,
+                            previous_task_id=previous_task_id,
+                            next_task_id=next_task_id,
+                            lesson=lesson,
+                            task=task,
+                            task_info=task_info,
+                            task_group=task_group,
+                            task_groups=task_groups,
+                            solution_code=solution_code,
+                            solution_url=solution_url,
+                            sections_types=sections_types,
+                        )
 
         if materials:
-            os.mkdir(os.path.join(lessons_path, str(lesson["id"]),
-                                  "materials"))
-            for material in materials:
-                material_id = material["id"]
-                content = client.get_material(lesson["id"], group_id,
-                                              material_id)
-                if "detailedMaterial" not in content:
-                    continue
+            materials_path = os.path.join(lesson_path, "materials")
+            os.mkdir(materials_path)
 
-                save_material_page(
-                    content["detailedMaterial"]["content"],
-                    content["lesson"]["shortTitle"],
-                    content["detailedMaterial"]["title"],
-                    course_id,
-                    lesson["id"],
-                    content["detailedMaterial"]["id"],
+            for material in materials:
+                material_information = client.get_material(
+                    material_id=material.id,
+                    lesson_id=lesson.id,
+                    group_id=course.group.id,
                 )
 
-    output_from_parsed_template = lessons_template.render(lessons=lessons,
-                                                          title=course_title)
-    with open(os.path.join(course_path, "index.html"), "w",
-              encoding="utf-8") as fh:
-        fh.write(output_from_parsed_template)
-    if not lessons:
-        courses.remove(course)
+                if not material_information.detailed_material:
+                    continue
 
-    save_courses_page(courses)
+                render_page(
+                    path=[materials_path, str(material.id)],
+                    template=material_template,
+                    lesson=lesson,
+                    material=material_information.detailed_material,
+                )
