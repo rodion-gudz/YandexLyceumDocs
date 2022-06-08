@@ -32,6 +32,10 @@ courses = [
     if input(f"{course.title}\t(Y/n) ").lower().strip() in ("y", "")
 ]
 
+if not courses:
+    print("Ни одного курса не выбрано")
+    exit()
+
 if os.path.exists("docs"):
     shutil.rmtree("docs")
 
@@ -49,8 +53,7 @@ shutil.copytree(os.path.join("templates", "js"), os.path.join(docs_path, "js"))
 courses_path = os.path.join(docs_path, "courses")
 os.mkdir(courses_path)
 
-print()
-print("Скачивание курсов...")
+print("\nСкачивание курсов...")
 for course in courses:
     course_path = os.path.join(courses_path, str(course.id))
 
@@ -68,8 +71,7 @@ for course in courses:
 
     for lesson in tqdm(
         lessons,
-        unit="course",
-        bar_format="{l_bar}{bar}| [{remaining}]",
+        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}]",
         desc=course.title,
     ):
         lesson_path = os.path.join(lessons_path, str(lesson.id))
