@@ -167,6 +167,9 @@ for course in courses:
             os.mkdir(materials_path)
 
             for material in materials:
+                if material.type != "textbook":
+                    continue
+
                 material_information = client.get_material(
                     material_id=material.id,
                     lesson_id=lesson.id,
