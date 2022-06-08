@@ -25,11 +25,11 @@
 							{% for lesson in lessons %}
 								<li class="link-list__item">
 									<a class="link-list__link"
-									   href="lessons/{{ lesson['id'] }}"
-									   style="min-height: auto">
+									   href="lessons/{{ lesson.id }}"
+									   style="min-height: auto;">
 										<div class="lesson-card">
 											<div class="lesson-card__lesson">
-												<h4 class="lesson-card__lesson-title">{{ lesson['title'] }}</h4>
+												<h4 class="lesson-card__lesson-title">{{ lesson.title }}</h4>
 											</div>
 										</div>
 									</a>

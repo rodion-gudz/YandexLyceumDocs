@@ -16,9 +16,9 @@
 					      class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span>
 						<span class="nav-tab__inner">Назад</span>
 					</a>
-					<h1 class="heading heading_level_1 lesson-header__heading">{{ lesson_titletle }}</h1>
+					<h1 class="heading heading_level_1 lesson-header__heading">{{ lesson.title }}</h1>
 					<div class="lesson-header__description">
-						<div class="html-content">{{ lesson_description }}</div>
+						<div class="html-content">{{ lesson.description }}</div>
 					</div>
 				</header>
 			</div>
@@ -34,22 +34,24 @@
 									<li aria-hidden="true"
 									    class="Accordion-Title">
 										<header class="task-group-header">
-											<span class="task-tag task-tag_type_{{ task_group['type'] }} task-tag_size_m task-group-header__icon"></span>
-											<h3 class="heading heading_level_3 task-group-header__heading">{{ task_group['full_type'] }}</h3>
+											<span class="task-tag task-tag_type_{{ task_group.type }} task-tag_size_m task-group-header__icon"></span>
+											<h3 class="heading heading_level_3 task-group-header__heading">{{ sections_types[task_group.type] }}</h3>
 										</header>
 									</li>
-									{% for task in task_group['tasks'] %}
+									{% if task_group.tasks %}
+										{% for task in task_group.tasks %}
 
-										<li class="Accordion-Item">
-											<a class="student-task-list__task"
-													{% if task['active'] %} href="tasks/{{ task['id'] }}" {% endif %}>
-												<div class="student-task-list__left">
-													<h4 class="heading heading_level_4 student-task-list__task-heading">{{ task['title'] }}</h4>
-												</div>
-											</a>
-										</li>
+											<li class="Accordion-Item">
+												<a class="student-task-list__task"
+												   href="tasks/{{ task.id }}">
+													<div class="student-task-list__left">
+														<h4 class="heading heading_level_4 student-task-list__task-heading">{{ task.title }}</h4>
+													</div>
+												</a>
+											</li>
 
-									{% endfor %}
+										{% endfor %}
+									{% endif %}
 								</ul>
 							{% endfor %}
 						</ul>
@@ -58,35 +60,39 @@
 					{% endif %}
 				</div>
 			</main>
-            {% if add_materials %}
-                <aside class="layout__aside">
-                    <section class="aside-section">
-                        <h1 class="heading heading_level_1">Материалы</h1>
-                        <div class="aside-section__body">
-                            <div class="material-list">
-                                {% if materials %}
-                                    <ul class="material-list__list">
-                                        {% for material in materials %}
-                                            <li class="material-list__item">
-                                                <a class="material-list__material-link"
-                                                   href="materials/{{ material['id'] }}">
-                                                    <div aria-hidden="true"
-                                                         class="material-list__icon material-list__icon_type_textbook"></div>
-                                                    <div class="material-list__material-title">{{ material['title'] }}</div>
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <div class="material-list__message">
-                                        Материалов нет
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </section>
-                </aside>
-            {% endif %}
+			{% if add_materials %}
+				<aside class="layout__aside">
+					<section class="aside-section">
+						<h1 class="heading heading_level_1">Материалы</h1>
+						<div class="aside-section__body">
+							<div class="material-list">
+								{% if materials %}
+									<ul class="material-list__list">
+										{% for material in materials %}
+											<li class="material-list__item">
+												<a class="material-list__material-link"
+														{% if material.type == "textbook" %}
+                                                   href="materials/{{ material.id }}"
+														{% else %}
+                                                   href="https://lyceum.yandex.ru/download/materials/{{ material.id }}?lessonId={{ lesson.id }}"
+														{% endif %}>
+													<div aria-hidden="true"
+													     class="material-list__icon material-list__icon_type_{{ material.type }}"></div>
+													<div class="material-list__material-title">{{ material.title }}</div>
+												</a>
+											</li>
+										{% endfor %}
+									</ul>
+								{% else %}
+									<div class="material-list__message">
+										Материалов нет
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</section>
+				</aside>
+			{% endif %}
 		</div>
 	</div>
 	{% include "includes/footer.html" %}

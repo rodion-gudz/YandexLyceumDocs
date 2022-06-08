@@ -1,88 +1,86 @@
 {% extends "base.jinja2" %}
-{% block title %}Задача {{ title }}{% endblock %}
+{% block title %}Задача {{ task.title }}{% endblock %}
 
 {% block custom_css %}
-    <link rel="stylesheet" href="/css/vendors.css">
-    <link rel="stylesheet" href="/css/prism.css"/>
+	<link rel="stylesheet" href="/css/vendors.css">
+	<link rel="stylesheet" href="/css/prism.css"/>
 {% endblock %}
 
 {% block content %}
-    <div class="layout">
-        <div class="layout__wrapper layout__wrapper_type_narrow">
-            <main class="layout__main"><a
-                    class="nav-tab nav-tab_back nav-tab_view_button"
-                    href="../.."><span data-lego="react"
-                                       class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span><span
-                    class="nav-tab__inner">Урок {{ lesson_short_title }}</span></a>
-                <nav class="yd407c--arrow-navigation">
-                    {% if previous_task_id %}
-                        <a
-                                class="yd407c--arrow-navigation__arrow yd407c--arrow-navigation__arrow_direction_left"
-                                href="../{{ previous_task_id }}">
+	<div class="layout">
+		<div class="layout__wrapper layout__wrapper_type_narrow">
+			<main class="layout__main"><a
+					class="nav-tab nav-tab_back nav-tab_view_button"
+					href="../.."><span data-lego="react"
+			                           class="icon icon_type_arrow-short icon_direction_left icon_size_s nav-tab__arrow-icon"></span><span
+					class="nav-tab__inner">Урок {{ lesson.short_title }}</span></a>
+				<nav class="yd407c--arrow-navigation">
+					{% if previous_task_id %}
+						<a class="yd407c--arrow-navigation__arrow yd407c--arrow-navigation__arrow_direction_left"
+						   href="../{{ previous_task_id }}">
                     <span data-lego="react"
                           class="icon icon_type_scroll icon_direction_left icon_size_l"></span></a>
-                    {% endif %}
-                    {% if next_task_id %}
-                        <a
-                                class="yd407c--arrow-navigation__arrow yd407c--arrow-navigation__arrow_direction_right"
-                                href="../{{ next_task_id }}">
-                        <span
-                                data-lego="react"
-                                class="icon icon_type_scroll icon_direction_right icon_size_l"></span></a>
-                    {% endif %}
-                </nav>
-                <header class="yde1c4--task-header">
-                    <h1 class="heading heading_level_1 yde1c4--task-header__heading">{{ task_title }}</h1>
-                    <div class="y43a24--task-info__tag">
-                        <span class="task-tag task-tag_type_{{ task_type }} task-tag_size_m"></span>
-                        <div class="y43a24--task-info__tag-name">{{ task_type_title }}</div>
-                    </div>
-                </header>
-                <section class="y6c2ac--task-description">
-                    <article class="y6c2ac--task-description__content">
-                        {{ task_description }}
-                        {% if add_solution %}
-                        {% if solution_url != None %}
-                            <h2>Решение</h2>
-                            <a class="nav-tab nav-tab_back nav-tab_view_button"
-                                href="{{ solution_url }}"><span data-lego="react"
-                                                           class="icon icon_type_arrow-short icon_direction_down icon_size_s nav-tab__arrow-icon"></span><span
-                                    class="nav-tab__inner">Скачать</span></a>
-{% if solution_code %}<pre class="language-python" style="border-radius: 15px"><code class="language-python">{{ solution_code }}</code></pre>{% endif %}{% endif %}</article></section>
-            {% endif %}
-            </main>
-        </div>
-        <aside class="layout__active-area">
-            <nav class="yd609d--task-group-navigation">
-                <ul class="yd609d--task-group-navigation__groups">
-                    {% for task_group in task_groups %}
-                        <li class="yd609d--task-group-navigation__group"><span
-                                class="task-tag task-tag_type_{{ task_group['type'] }} task-tag_size_l yd609d--task-group-navigation__tag"
-                                tabindex="{{ 8 }}"></span>
-                            <ul class="yd609d--task-group-navigation__tasks">
-                                {% for task in task_group['tasks'] %}
-                                    <li class="yd609d--task-group-navigation__task">
-                                        {% if task['id'] == task_id %}
-                                            <a
-                                                    class="yd609d--task-group-navigation__link  yd609d--task-group-navigation__link_checked"
-                                                    href="../{{ task['id'] }}">
-                                                <div class="indicator indicator_color_grey indicator_size_xs"></div>
-                                            </a>
-                                        {% else %}
-                                            <a
-                                                    class="yd609d--task-group-navigation__link"
-                                                    href="../{{ task['id'] }}">
-                                                <div class="indicator indicator_color_grey indicator_size_xs"></div>
-                                            </a>
-                                        {% endif %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </nav>
-        </aside>
-    </div>
-    <script src="/js/prism.js"></script>
+					{% endif %}
+					{% if next_task_id %}
+						<a class="yd407c--arrow-navigation__arrow yd407c--arrow-navigation__arrow_direction_right"
+						   href="../{{ next_task_id }}">
+                        <span data-lego="react"
+                              class="icon icon_type_scroll icon_direction_right icon_size_l"></span></a>
+					{% endif %}
+				</nav>
+				<header class="yde1c4--task-header">
+					<h1 class="heading heading_level_1 yde1c4--task-header__heading">{{ task.title }}</h1>
+					<div class="y43a24--task-info__tag">
+						<span class="task-tag task-tag_type_{{ task_group.type }} task-tag_size_m"></span>
+						<div class="y43a24--task-info__tag-name">{{ sections_types[task_group.type] }}</div>
+					</div>
+				</header>
+				<section class="y6c2ac--task-description">
+					<article class="y6c2ac--task-description__content">
+						{{ task_info.description }}
+						{% if add_solution %}
+							{% if solution_url != None %}
+								<h2>Решение</h2>
+								<a class="nav-tab nav-tab_back nav-tab_view_button"
+								   href="{{ solution_url }}"><span data-lego="react"
+								                                   class="icon icon_type_arrow-short icon_direction_down icon_size_s nav-tab__arrow-icon"></span><span
+										class="nav-tab__inner">Скачать</span></a>
+								{% if solution_code %}
+									<pre class="language-python" style="border-radius: 15px"><code
+											class="language-python">{{ solution_code }}</code></pre>
+								{% endif %}{% endif %}</article></section>
+						{% endif %}
+			</main>
+		</div>
+		<aside class="layout__active-area">
+			<nav class="yd609d--task-group-navigation">
+				<ul class="yd609d--task-group-navigation__groups">
+					{% for task_group in task_groups %}
+						<li class="yd609d--task-group-navigation__group"><span
+								class="task-tag task-tag_type_{{ task_group.type }} task-tag_size_l yd609d--task-group-navigation__tag"
+								tabindex="{{ 8 }}"></span>
+							<ul class="yd609d--task-group-navigation__tasks">
+								{% for now_task in task_group.tasks %}
+									<li class="yd609d--task-group-navigation__task">
+										{% if now_task.id == task.id %}
+											<a class="yd609d--task-group-navigation__link  yd609d--task-group-navigation__link_checked"
+											   href="../{{ now_task.id }}">
+												<div class="indicator indicator_color_grey indicator_size_xs"></div>
+											</a>
+										{% else %}
+											<a class="yd609d--task-group-navigation__link"
+											   href="../{{ now_task.id }}">
+												<div class="indicator indicator_color_grey indicator_size_xs"></div>
+											</a>
+										{% endif %}
+									</li>
+								{% endfor %}
+							</ul>
+						</li>
+					{% endfor %}
+				</ul>
+			</nav>
+		</aside>
+	</div>
+	<script src="/js/prism.js"></script>
 {% endblock %}
