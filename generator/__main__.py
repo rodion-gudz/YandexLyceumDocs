@@ -19,7 +19,10 @@ args = parse_arguments()
 
 client = Client(login=args.login, password=args.password)
 
-user = client.get_user()
+user = client.get_user(
+    with_parents=False,
+    with_children=False
+)
 
 courses = user.courses_summary.teacher if args.teacher else user.courses_summary.student
 
