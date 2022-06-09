@@ -106,8 +106,9 @@ for course in courses:
         )
 
         if task_groups:
-            tasks_path = os.path.join(lesson_path, "tasks")
-            os.mkdir(tasks_path)
+            if any(task_group.tasks for task_group in task_groups):
+                tasks_path = os.path.join(lesson_path, "tasks")
+                os.mkdir(tasks_path)
 
             task_ids = []
             for task_group in task_groups:
@@ -141,10 +142,12 @@ for course in courses:
                             solution_url = None
 
                         task_index = task_ids.index(task.id)
+
                         if task_index == 0:
                             previous_task_id = None
                         else:
                             previous_task_id = task_ids[task_ids.index(task.id) - 1]
+
                         if task_index == len(task_ids) - 1:
                             next_task_id = None
                         else:
@@ -166,8 +169,9 @@ for course in courses:
                         )
 
         if materials:
-            materials_path = os.path.join(lesson_path, "materials")
-            os.mkdir(materials_path)
+            if any(material.type == "textbook" for material in materials):
+                materials_path = os.path.join(lesson_path, "materials")
+                os.mkdir(materials_path)
 
             for material in materials:
                 if material.type != "textbook":
