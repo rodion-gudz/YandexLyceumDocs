@@ -146,23 +146,16 @@ for course in courses:
                             solution_code = None
                             solution_url = None
 
-                        task_index = task_ids.index(task.id)
-
-                        if task_index == 0:
-                            previous_task_id = None
-                        else:
-                            previous_task_id = task_ids[task_ids.index(task.id) - 1]
-
-                        if task_index == len(task_ids) - 1:
-                            next_task_id = None
-                        else:
-                            next_task_id = task_ids[task_ids.index(task.id) + 1]
+                        previous_id, next_id = get_neighboring_items(
+                            items=task_ids,
+                            item=task.id,
+                        )
 
                         render_page(
                             path=[tasks_path, str(task.id)],
                             template=task_template,
-                            previous_task_id=previous_task_id,
-                            next_task_id=next_task_id,
+                            previous_task_id=previous_id,
+                            next_task_id=next_id,
                             lesson=lesson,
                             task=task,
                             task_info=task_info,
