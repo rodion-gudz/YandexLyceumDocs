@@ -12,8 +12,8 @@ from generator.templates import (
     lesson_template,
     lessons_template,
     material_template,
-    task_template,
     problem_template,
+    task_template,
 )
 from generator.utils import get_neighboring_items, parse_resources_and_paragraph
 
