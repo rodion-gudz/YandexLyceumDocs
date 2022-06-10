@@ -85,9 +85,12 @@ for course in courses:
             course_id=course.id,
         )
 
-        materials = client.get_materials(
-            lesson_id=lesson.id,
-        )
+        if args.materials:
+            materials = client.get_materials(
+                lesson_id=lesson.id,
+            )
+        else:
+            materials = None
 
         lesson_information = client.get_lesson(
             lesson_id=lesson.id,
@@ -105,10 +108,10 @@ for course in courses:
             sections_types=sections_types,
         )
 
-        if task_groups:
-            if any(task_group.tasks for task_group in task_groups):
-                tasks_path = os.path.join(lesson_path, "tasks")
-                os.mkdir(tasks_path)
+        if task_groups and any(task_group.tasks for task_group in task_groups):
+
+            tasks_path = os.path.join(lesson_path, "tasks")
+            os.mkdir(tasks_path)
 
             task_ids = []
             for task_group in task_groups:
@@ -118,25 +121,28 @@ for course in courses:
             for task_group in task_groups:
                 if task_group.tasks:
                     for task in task_group.tasks:
-
                         task_info = client.get_task(
                             task_id=task.id,
                             group_id=course.group.id,
                         )
 
-                        solution_information = client.get_solution_information(
-                            solution_id=task_info.solution_id,
-                        )
+                        if args.solutions:
+                            solution_information = client.get_solution_information(
+                                solution_id=task_info.solution_id,
+                            )
 
-                        if hasattr(
-                            solution_information.solution.latest_submission, "file"
-                        ):
-                            solution_code = (
-                                solution_information.solution.latest_submission.file.source_code
-                            )
-                            solution_url = (
-                                solution_information.solution.latest_submission.file.url
-                            )
+                            if hasattr(
+                                solution_information.solution.latest_submission, "file"
+                            ):
+                                solution_code = (
+                                    solution_information.solution.latest_submission.file.source_code
+                                )
+                                solution_url = (
+                                    solution_information.solution.latest_submission.file.url
+                                )
+                            else:
+                                solution_code = None
+                                solution_url = None
                         else:
                             solution_code = None
                             solution_url = None
@@ -163,15 +169,16 @@ for course in courses:
                             task_info=task_info,
                             task_group=task_group,
                             task_groups=task_groups,
+                            add_solution=args.solutions,
                             solution_code=solution_code,
                             solution_url=solution_url,
                             sections_types=sections_types,
                         )
 
-        if materials:
-            if any(material.type == "textbook" for material in materials):
-                materials_path = os.path.join(lesson_path, "materials")
-                os.mkdir(materials_path)
+        if args.materials and materials and any(material.type == "textbook" for material in materials):
+
+            materials_path = os.path.join(lesson_path, "materials")
+            os.mkdir(materials_path)
 
             for material in materials:
                 if material.type != "textbook":
