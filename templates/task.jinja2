@@ -46,10 +46,15 @@
 								                                   class="icon icon_type_arrow-short icon_direction_down icon_size_s nav-tab__arrow-icon"></span><span
 										class="nav-tab__inner">Скачать</span></a>
 								{% if solution_code %}
-									<pre class="language-python" style="border-radius: 15px"><code
-											class="language-python">{{ solution_code }}</code></pre>
-								{% endif %}{% endif %}</article></section>
+									<details>
+										<summary>Код</summary>
+										<pre class="language-python" style="border-radius: 15px"><code
+												class="language-python">{{ solution_code }}</code></pre>
+									</details>
+								{% endif %}{% endif %}
+							</article>
 						{% endif %}
+				</section>
 			</main>
 		</div>
 		<aside class="layout__active-area">
