@@ -8,12 +8,12 @@
 				<h1 class="heading heading_level_1 courses__heading">Курсы</h1>
 				<ul class="courses__list">
 					{% for course in courses %}
-						{% if course["active"] %}
+						{% if course.is_active %}
 							<li class="courses__list-item">
 								<a class="course-card course-card_type_link"
-								   href="courses/{{ course['course_id'] }}">
+								   href="courses/{{ course.id }}">
 									<h4 class="course-card__title"
-									    title="{{ course['title'] }}">{{ course['title'] }}</h4>
+									    title="{{ course.title }}">{{ course.title }}</h4>
 								</a>
 							</li>
 						{% endif %}
