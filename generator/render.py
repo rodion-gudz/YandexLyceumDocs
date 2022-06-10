@@ -9,5 +9,6 @@ def render_page(path: List[Union[str, bytes]], template: Template, **kwargs):
 
     os.mkdir(save_path)
 
-    with open(os.path.join(save_path, "index.html"), "w", encoding="utf-8") as file:
+    with open(os.path.join(save_path, "index.html"), "w",
+              encoding="utf-8") as file:
         file.write(template.render(**kwargs))
