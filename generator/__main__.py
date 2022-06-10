@@ -26,7 +26,9 @@ courses = user.courses_summary.teacher if args.teacher else user.courses_summary
 print("Список курсов:")
 
 courses = [
-    course for course in courses if course.is_active
+    course
+    for course in courses
+    if course.is_active
     if input(f"{course.title}\t(Y/n) ").lower().strip() in ("y", "")
 ]
 
@@ -45,8 +47,7 @@ render_page(
     courses=courses,
 )
 
-shutil.copytree(os.path.join("templates", "css"),
-                os.path.join(docs_path, "css"))
+shutil.copytree(os.path.join("templates", "css"), os.path.join(docs_path, "css"))
 shutil.copytree(os.path.join("templates", "js"), os.path.join(docs_path, "js"))
 
 courses_path = os.path.join(docs_path, "courses")
@@ -69,9 +70,9 @@ for course in courses:
     os.makedirs(lessons_path)
 
     for lesson in tqdm(
-            lessons,
-            bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}]",
-            desc=course.title,
+        lessons,
+        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}]",
+        desc=course.title,
     ):
         lesson_path = os.path.join(lessons_path, str(lesson.id))
 
@@ -82,7 +83,9 @@ for course in courses:
         )
 
         if args.materials:
-            materials = client.get_materials(lesson_id=lesson.id, )
+            materials = client.get_materials(
+                lesson_id=lesson.id,
+            )
         else:
             materials = None
 
@@ -122,16 +125,18 @@ for course in courses:
 
                         if args.solutions:
                             solution_information = client.get_solution_information(
-                                solution_id=task_info.solution_id, )
+                                solution_id=task_info.solution_id,
+                            )
 
                             if hasattr(
-                                    solution_information.solution.
-                                    latest_submission, "file"):
+                                solution_information.solution.latest_submission, "file"
+                            ):
                                 solution_code = (
-                                    solution_information.solution.
-                                    latest_submission.file.source_code)
-                                solution_url = (solution_information.solution.
-                                                latest_submission.file.url)
+                                    solution_information.solution.latest_submission.file.source_code
+                                )
+                                solution_url = (
+                                    solution_information.solution.latest_submission.file.url
+                                )
                             else:
                                 solution_code = None
                                 solution_url = None
@@ -144,14 +149,12 @@ for course in courses:
                         if task_index == 0:
                             previous_task_id = None
                         else:
-                            previous_task_id = task_ids[task_ids.index(task.id)
-                                                        - 1]
+                            previous_task_id = task_ids[task_ids.index(task.id) - 1]
 
                         if task_index == len(task_ids) - 1:
                             next_task_id = None
                         else:
-                            next_task_id = task_ids[task_ids.index(task.id) +
-                                                    1]
+                            next_task_id = task_ids[task_ids.index(task.id) + 1]
 
                         render_page(
                             path=[tasks_path, str(task.id)],
@@ -169,8 +172,11 @@ for course in courses:
                             sections_types=sections_types,
                         )
 
-        if (args.materials and materials and any(material.type == "textbook"
-                                                 for material in materials)):
+        if (
+            args.materials
+            and materials
+            and any(material.type == "textbook" for material in materials)
+        ):
 
             materials_path = os.path.join(lesson_path, "materials")
             os.mkdir(materials_path)
