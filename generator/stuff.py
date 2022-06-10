@@ -4,5 +4,5 @@ sections_types = {
     "additional": "Дополнительные задачи",
     "individual-work": "Самостоятельная работа",
     "control-work": "Контрольная работа",
-    "onboarding-test": "Вступительный тест"
+    "onboarding-test": "Вступительный тест",
 }
