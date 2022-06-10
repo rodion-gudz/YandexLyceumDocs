@@ -13,7 +13,9 @@ from generator.templates import (
     lessons_template,
     material_template,
     task_template,
+    problem_template,
 )
+from generator.utils import get_neighboring_items, parse_resources_and_paragraph
 
 args = parse_arguments()
 
@@ -169,6 +171,48 @@ for course in courses:
                             add_solution=args.solutions,
                             solution_code=solution_code,
                             solution_url=solution_url,
+                            sections_types=sections_types,
+                        )
+
+        if task_groups and any(task_group.problems for task_group in task_groups):
+
+            problems_path = os.path.join(lesson_path, "problems")
+            os.mkdir(problems_path)
+
+            problems_id = []
+            for task_group in task_groups:
+                if task_group.problems:
+                    problems_id.extend(task.id for task in task_group.problems)
+
+            for task_group in task_groups:
+                if task_group.problems:
+                    for problem in task_group.problems:
+
+                        previous_id, next_id = get_neighboring_items(
+                            items=problems_id,
+                            item=problem.id,
+                        )
+
+                        paragraphs = []
+                        for layout in problem.problem.markup.layout:
+                            resources_id, text = parse_resources_and_paragraph(
+                                layout.content.text or ""
+                            )
+                            paragraphs.append(
+                                {"text": text, "resources_id": resources_id}
+                            )
+
+                        render_page(
+                            path=[problems_path, str(problem.id)],
+                            template=problem_template,
+                            lesson=lesson,
+                            problem=problem,
+                            task_group=task_group,
+                            task_groups=task_groups,
+                            paragraphs=paragraphs,
+                            resources=problem.problem.resources,
+                            next_id=next_id,
+                            previous_id=previous_id,
                             sections_types=sections_types,
                         )
 

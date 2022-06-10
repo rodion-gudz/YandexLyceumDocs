@@ -40,7 +40,6 @@
 									</li>
 									{% if task_group.tasks %}
 										{% for task in task_group.tasks %}
-
 											<li class="Accordion-Item">
 												<a class="student-task-list__task"
 												   href="tasks/{{ task.id }}">
@@ -49,7 +48,18 @@
 													</div>
 												</a>
 											</li>
-
+										{% endfor %}
+									{% endif %}
+									{% if task_group.problems %}
+										{% for problem in task_group.problems %}
+											<li class="Accordion-Item">
+												<a class="student-task-list__task"
+												   href="problems/{{ problem.id }}">
+													<div class="student-task-list__left">
+														<h4 class="heading heading_level_4 student-task-list__task-heading">{{ problem.title }}</h4>
+													</div>
+												</a>
+											</li>
 										{% endfor %}
 									{% endif %}
 								</ul>
