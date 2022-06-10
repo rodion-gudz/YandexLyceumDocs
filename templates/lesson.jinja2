@@ -84,7 +84,7 @@
 														{% if material.type == "textbook" %}
                                                    href="materials/{{ material.id }}"
 														{% else %}
-                                                   href="https://lyceum.yandex.ru/download/materials/{{ material.id }}?lessonId={{ lesson.id }}"
+                                                   href="{{ material_urls[material.id] }}"
 														{% endif %}>
 													<div aria-hidden="true"
 													     class="material-list__icon material-list__icon_type_{{ material.type }}"></div>

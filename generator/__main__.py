@@ -88,8 +88,16 @@ for course in courses:
             materials = client.get_materials(
                 lesson_id=lesson.id,
             )
+            material_urls = {
+                material.id: client.get(
+                    f"https://lyceum.yandex.ru/download/materials/{material.id}?lessonId={lesson.id}"
+                ).url
+                for material in materials
+                if material.type != "textbook"
+            }
         else:
             materials = None
+            material_urls = None
 
         lesson_information = client.get_lesson(
             lesson_id=lesson.id,
@@ -103,6 +111,7 @@ for course in courses:
             lesson=lesson_information,
             add_materials=args.materials,
             materials=materials,
+            material_urls=material_urls,
             task_groups=task_groups,
             sections_types=sections_types,
         )
