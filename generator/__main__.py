@@ -12,8 +12,8 @@ from generator.templates import (
     lesson_template,
     lessons_template,
     material_template,
-    task_template,
     problem_template,
+    task_template,
 )
 from generator.utils import get_neighboring_items, parse_resources_and_paragraph
 
@@ -134,7 +134,7 @@ for course in courses:
                             group_id=course.group.id,
                         )
 
-                        if args.solutions:
+                        if args.solutions and task_info.solution_id:
                             solution_information = client.get_solution_information(
                                 solution_id=task_info.solution_id,
                             )
