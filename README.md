@@ -25,9 +25,9 @@
     </details>
   
   
-* Клонируем [репозиторий](https://github.com/fast-geek/YandexLyceumDocs)
+* Клонируем [репозиторий](https://github.com/rodion-gudz/YandexLyceumDocs)
 ```shell
-git clone https://github.com/fast-geek/YandexLyceumDocs.git
+git clone https://github.com/rodion-gudz/YandexLyceumDocs.git
 ```
 * Переходим в каталог репозитория и устанавливаем зависимости
 ```shell
