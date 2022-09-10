@@ -1,4 +1,4 @@
 Jinja2
 requests
 tqdm
-PyYandexLMS==0.3.9
+PyYandexLMS==0.3.11
